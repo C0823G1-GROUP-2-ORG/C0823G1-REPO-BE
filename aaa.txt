@@ -1,6 +1,3 @@
 aaaa
-<<<<<<< HEAD
 nguyễn trọng hải
-=======
 Nguyen Dinh Thai Bao
->>>>>>> 902a31e3f844e99ce5d88817d7f6854bc1a8ed84
