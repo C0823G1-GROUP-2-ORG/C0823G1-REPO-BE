@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    let numArr = [1, 7, 3, 12];
+    let checkArr = 1;
+    for (let i = 0; i < numArr.length; i++) {
+        if (numArr[i] % 2 !== 0) {
+            if (numArr[i + 1] % 2 === 0) {
+                checkArr = -1;
+            } else {
+                checkArr = 0;
+            }
+        }
+    }
+    alert(checkArr);
+</script>
+</body>
+</html>
