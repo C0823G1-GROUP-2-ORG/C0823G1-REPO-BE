@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    let arr = ["a", "b", "r", "e"];
+    let checkArr;
+    for (let i = 0; i < arr.length; i++) {
+        if (typeof arr[0] === "number") {
+            if (typeof arr[i] === "number" && typeof arr[i + 1] === "string") {
+                checkArr = -1;
+                break;
+            } else {
+                checkArr = 1
+            }
+        }
+        if (typeof arr[0] === "string") {
+            if (typeof arr[i] === "string" && typeof arr[i + 1] === "number") {
+                checkArr = -1;
+                break;
+            } else {
+                checkArr = 0;
+            }
+        }
+    }
+    alert(checkArr);
+</script>
+</body>
+</html>
