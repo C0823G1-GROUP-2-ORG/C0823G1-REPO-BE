@@ -33,6 +33,15 @@ public class Contract {
         this.idApartment = idApartment;
     }
 
+    public Contract(String contractDate, String contractEndDate, Integer deposit, Integer idCustomer, Integer idStaff, Integer idApartment) {
+        this.contractDate = contractDate;
+        this.contractEndDate = contractEndDate;
+        this.deposit = deposit;
+        this.idCustomer = idCustomer;
+        this.idStaff = idStaff;
+        this.idApartment = idApartment;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -39,6 +39,11 @@ public class Customer {
         this.idAccount = idAccount;
     }
 
+    public Customer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }

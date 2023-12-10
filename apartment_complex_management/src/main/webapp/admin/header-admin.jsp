@@ -123,7 +123,7 @@
                          width="23" alt=""/>
                 </div>
                 <div class="d-flex justify-content-center mt-2">
-                    <a href="/apartment-admin?action=officetel" style="text-decoration: none; color: black"><h6 class=" px-2">
+                    <a href="/contract-servlet?action=contract" style="text-decoration: none; color: black"><h6 class=" px-2">
                         Hợp đồng</h6></a>
                 </div>
             </div>

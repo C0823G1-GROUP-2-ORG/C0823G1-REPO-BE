@@ -101,3 +101,20 @@ where ma_can_ho = n_ma_can_ho;
 end
 // delimiter ;
 
+delimiter //
+create procedure danh_sach_tai_khoan()
+begin
+select * from tai_khoan;
+end;
+// delimiter ;
+call danh_sach_tai_khoan();
+
+
+delimiter //
+create procedure them_tai_khoan(n_ten_tai_khoan varchar(45),n_mat_khau varchar(45), n_ma_loai_tai_khoan int)
+begin
+insert into tai_khoan(ten_tai_khoan,mat_khau, ma_loai_tai_khoan)
+values(n_ten_tai_khoan,n_mat_khau, n_ma_loai_tai_khoan);
+end;
+// delimiter ;
+

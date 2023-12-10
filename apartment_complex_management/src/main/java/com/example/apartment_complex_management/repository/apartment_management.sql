@@ -7,6 +7,21 @@ ma_bo_phan int primary key auto_increment,
 ten_bo_phan varchar(45)
 );
 
+create table loai_tai_khoan(
+ma_loai_tai_khoan int primary key auto_increment,
+ten_loai_tai_khoan varchar(45)
+);
+
+
+create table tai_khoan(
+ma_tai_khoan int primary key auto_increment,
+ten_tai_khoan varchar(45) unique not null,
+mat_khau varchar(45) not null,
+ma_loai_tai_khoan int not null,
+foreign key(ma_loai_tai_khoan) references loai_tai_khoan(ma_loai_tai_khoan),
+is_delete bit(1) default 0
+);
+
 create table nhan_vien(
 ma_nhan_vien int primary key auto_increment,
 ho_ten varchar(45) not null,
@@ -24,19 +39,9 @@ foreign key(ma_tai_khoan) references tai_khoan(ma_tai_khoan),
 is_delete bit(1) default 0
 );
 
-create table loai_tai_khoan(
-ma_loai_tai_khoan int primary key auto_increment,
-ten_loai_tai_khoan varchar(45)
-);
 
-create table tai_khoan(
-ma_tai_khoan int primary key auto_increment,
-ten_tai_khoan varchar(45) unique not null,
-mat_khau varchar(45) not null,
-ma_loai_tai_khoan int not null,
-foreign key(ma_loai_tai_khoan) references loai_tai_khoan(ma_loai_tai_khoan),
-is_delete bit(1) default 0
-);
+
+
 
 create table khach_hang(
 ma_khach_hang int primary key auto_increment,
