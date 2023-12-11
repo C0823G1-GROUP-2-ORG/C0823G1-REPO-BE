@@ -12,14 +12,15 @@ public class ViewingScheduleRepository implements IViewingScheduleRepository {
     private final String INSERT_VIEW_SCHEDULE = "insert into lich_xem(ma_can_ho,ten_khach_hang,so_dien_thoai,email,tinh_trang)\n" +
             "values(?,?,?,?,?);";
     private final String SELECT_ALL_VIEW_SCHEDULE = "select * from lich_xem where is_delete = 0;";
-    private final String CALL_ADD_VIEW_SCHEDULE = "call them_lich_xem(?,?,?,?,?);";
+    private final String CALL_ADD_VIEW_SCHEDULE = "call them_lich_xem(?,?,?,?,?,?);";
     private final String CALL_VIEW_SCHEDULE_DTO = "call danh_sach_lich_xem;";
     private final String SET_UP_VIEW_DATE = "update lich_xem set ngay_xem_can_ho = ? , tinh_trang = ? where ma_lich_xem = ?;";
     private final String DELETE_OLD_SCHEDULE = "update lich_xem set is_delete = ? where ma_lich_xem = ?;";
     private final String EDIT_SCHEDULE = "update lich_xem set ngay_xem_can_ho = ? where ma_lich_xem = ?;";
+    private final String FEEDBACK_SCHEDULE = "update lich_xem set tinh_trang = 'Đã phản hồi' where ma_lich_xem = ?;";
 
     @Override
-    public void insertViewSchedule(Integer id, String name, String phone, String email) {
+    public void insertViewSchedule(Integer id, String name, String phone, String email, String newDate) {
         Connection connection = null;
         CallableStatement callableStatement = null;
         try {
@@ -29,7 +30,8 @@ public class ViewingScheduleRepository implements IViewingScheduleRepository {
             callableStatement.setString(2, name);
             callableStatement.setString(3, phone);
             callableStatement.setString(4, email);
-            callableStatement.setString(5, "Chờ phản hồi");
+            callableStatement.setString(5, newDate);
+            callableStatement.setString(6, "Chờ phản hồi");
             callableStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -70,7 +72,7 @@ public class ViewingScheduleRepository implements IViewingScheduleRepository {
                 customerName = rs.getString("ten_khach_hang");
                 customerPhone = rs.getString("so_dien_thoai");
                 viewDate = rs.getString("ngay_xem_can_ho");
-                if (viewDate == null){
+                if (viewDate == null) {
                     viewDate = "";
                 }
                 email = rs.getString("email");
@@ -124,14 +126,14 @@ public class ViewingScheduleRepository implements IViewingScheduleRepository {
     @Override
     public void setUpSchedule(List<ViewingSchedule> viewingSchedules) {
         Connection connection = null;
-        PreparedStatement  preparedStatement = null;
-        try{
+        PreparedStatement preparedStatement = null;
+        try {
             connection = BaseRepository.getConnection();
-            for (ViewingSchedule viewingSchedule:viewingSchedules){
+            for (ViewingSchedule viewingSchedule : viewingSchedules) {
                 preparedStatement = connection.prepareStatement(SET_UP_VIEW_DATE);
-                preparedStatement.setString(1,viewingSchedule.getViewDate());
-                preparedStatement.setString(2,"Đã phản hồi");
-                preparedStatement.setInt(3,viewingSchedule.getId());
+                preparedStatement.setString(1, viewingSchedule.getViewDate());
+                preparedStatement.setString(2, "Đã phản hồi");
+                preparedStatement.setInt(3, viewingSchedule.getId());
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -142,13 +144,13 @@ public class ViewingScheduleRepository implements IViewingScheduleRepository {
     @Override
     public void deleteOldSchedule(List<ViewingSchedule> viewingSchedules) {
         Connection connection = null;
-        PreparedStatement  preparedStatement = null;
-        try{
+        PreparedStatement preparedStatement = null;
+        try {
             connection = BaseRepository.getConnection();
-            for (ViewingSchedule viewingSchedule:viewingSchedules){
+            for (ViewingSchedule viewingSchedule : viewingSchedules) {
                 preparedStatement = connection.prepareStatement(DELETE_OLD_SCHEDULE);
-                preparedStatement.setInt(1,viewingSchedule.getIsDeleted());
-                preparedStatement.setInt(2,viewingSchedule.getId());
+                preparedStatement.setInt(1, viewingSchedule.getIsDeleted());
+                preparedStatement.setInt(2, viewingSchedule.getId());
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -160,11 +162,25 @@ public class ViewingScheduleRepository implements IViewingScheduleRepository {
     public void editSchedule(Integer id, String viewDate) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        try{
+        try {
             connection = BaseRepository.getConnection();
             preparedStatement = connection.prepareStatement(EDIT_SCHEDULE);
-            preparedStatement.setString(1,viewDate);
-            preparedStatement.setInt(2,id);
+            preparedStatement.setString(1, viewDate);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void feedbackSchedule(Integer id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = BaseRepository.getConnection();
+            preparedStatement = connection.prepareStatement(FEEDBACK_SCHEDULE);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

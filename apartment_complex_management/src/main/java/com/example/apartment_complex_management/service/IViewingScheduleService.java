@@ -6,7 +6,7 @@ import com.example.apartment_complex_management.model.ViewingScheduleDTO;
 import java.util.List;
 
 public interface IViewingScheduleService {
-    void insertViewSchedule(Integer id, String name, String phone, String email);
+    void insertViewSchedule(Integer id, String name, String phone, String email, String newDate);
 
     boolean checkViewSchedule(Integer id);
 
@@ -21,4 +21,6 @@ public interface IViewingScheduleService {
     void deleteOldSchedule();
 
     void editSchedule(Integer id, String viewDate);
+
+    void feedbackSchedule(Integer id);
 }
