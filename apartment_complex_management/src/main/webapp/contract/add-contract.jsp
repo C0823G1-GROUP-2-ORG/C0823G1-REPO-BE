@@ -5,7 +5,7 @@
   Time: 1:43 CH
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -81,7 +81,10 @@
 <body>
 <jsp:include page="../admin/header-admin.jsp" />
 <h1 style="text-align: center;font-weight: bold;color: #f44566; margin-top: 100px;margin-bottom: 40px">Thêm mới hợp đồng</h1>
-<h5 style="color: red">${message}</h5>
+<div style="text-align: center">
+    <h5 style="color: red">${message}</h5>
+</div>
+
 <form method="post">
     <div class="d-flex justify-content-center" style="width: 50%; margin-left: 25%">
         <table border="1" class="table table-striped">
@@ -94,20 +97,36 @@
                 <td><input type="date" name="contractEndDate" placeholder="01/01/2023"></td>
             </tr>
             <tr>
-                <th>Tiền đặt cọc</th>
-                <td><input type="text" name="deposit" value="0"></td>
+                <th><label for="nameCustomer">Khách hàng</label></th>
+                <td>
+                    <select name="customer" id="nameCustomer">
+                        <c:forEach items="${customer}" var="customer" varStatus="loop">
+                            <option value="${customer.id}">${customer.name}</option>
+                        </c:forEach>
+                    </select>
+                </td>
             </tr>
             <tr>
-                <th>Mã khách hàng</th>
-                <td><input type="text" name="idCustomer"></td>
-            </tr>
-            <tr>
-                <th>Mã nhân viên</th>
-                <td><input type="text" name="idStaff"></td>
+                <th>Nhân viên</th>
+                <td>
+                    <select name="staff">
+                        <c:forEach items="${staff}" var="staff" varStatus="loop">
+                            <option name="staff" value="${staff.id}">${staff.name}</option>
+                        </c:forEach>
+                    </select>
+
+                </td>
             </tr>
             <tr>
                 <th>Mã căn hộ</th>
-                <td><input type="text" name="idApartment"></td>
+                <td>
+                    <select name="apartment">
+                        <c:forEach items="${apartments}" var="apartment" varStatus="loop">
+                            <option name="apartment" value="${apartment.id}">${apartment.name}</option>
+                        </c:forEach>
+                    </select>
+
+                </td>
             </tr>
             <tr>
                 <td></td>

@@ -74,7 +74,10 @@
 <body>
 <jsp:include page="../admin/header-admin.jsp" />
 <h1 style="text-align: center;font-weight: bold;color: #f44566; margin-top: 100px;margin-bottom: 40px">Danh sách hợp đồng</h1>
-<h5 style="color: red;">${message}</h5>
+<div style="text-align: center">
+    <h5 style="color: red;">${message}</h5>
+</div>
+
 <table>
     <tr>
         <td>
@@ -161,9 +164,9 @@
             <th scope="col" style="color: #F5DEB3;width: 10%">Ngày làm hợp đồng</th>
             <th scope="col" style="color: #F5DEB3;width: 10%">Ngày kết thúc</th>
             <th scope="col" style="color: #F5DEB3;width: 10%">Tiền đặt cọc</th>
-            <th scope="col" style="color: #F5DEB3;width: 15%">Mã khách hàng (Họ và tên)</th>
-            <th scope="col" style="color: #F5DEB3;width: 15%">Mã nhân viên (Họ và tên)</th>
-            <th scope="col" style="color: #F5DEB3;width: 10%">Mã Căn hộ (Tên căn hộ)̣</th>
+            <th scope="col" style="color: #F5DEB3;width: 15%">Khách hàng</th>
+            <th scope="col" style="color: #F5DEB3;width: 15%">Nhân viên</th>
+            <th scope="col" style="color: #F5DEB3;width: 10%">Căn hộ</th>
             <th scope="col" style="color: #F5DEB3;width: 10%">Tình trạng</th>
             <th scope="col" style="color: #F5DEB3;width: 10%">Gia hạn</th>
             <th scope="col" style="color: #F5DEB3;width: 5%">Ngưng hợp đồng</th>
@@ -175,25 +178,27 @@
                 <td>${contract.contractEndDate}</td>
                 <td>${contract.deposit}</td>
 <%--                <td>${contract.idCustomer}</td>--%>
-                <td> ${contract.idCustomer}
+<%--                <td> ${contract.idCustomer}--%><td>
                     <c:forEach items="${customer}" var="customer" varStatus="loop">
                         <c:if test="${customer.id == contract.idCustomer}">
-                            (${customer.name})
+                            ${customer.name}
                         </c:if>
                     </c:forEach>
                 </td>
-                <td> ${contract.idStaff}
+<%--                <td> ${contract.idStaff}--%>
+                <td>
                 <c:forEach items="${staff}" var="staff" varStatus="loop">
                     <c:if test="${staff.id == contract.idStaff}">
-                         (${staff.name})
+                         ${staff.name}
                     </c:if>
                 </c:forEach>
                 </td>
 <%--                <td>${contract.idApartment}</td>--%>
-                <td> ${contract.idApartment}
+<%--                <td> ${contract.idApartment}--%>
+                <td>
                     <c:forEach items="${apartments}" var="apartment" varStatus="loop">
                         <c:if test="${apartment.id == contract.idApartment}">
-                            (${apartment.name})
+                            ${apartment.name}
                         </c:if>
                     </c:forEach>
                 </td>
@@ -274,11 +279,11 @@
         </c:forEach>
     </table>
 </div>
-<p>
-    <c:if test='${requestScope["message"] != null}'>
-        <span class="message">${requestScope["message"]}</span>
-    </c:if>
-</p>
+<%--<p>--%>
+<%--    <c:if test='${requestScope["message"] != null}'>--%>
+<%--        <span class="message">${requestScope["message"]}</span>--%>
+<%--    </c:if>--%>
+<%--</p>--%>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

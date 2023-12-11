@@ -66,5 +66,30 @@ public class ContractService implements IContractService {
         contractRepository.contractExtension(id,month);
     }
 
+    @Override
+    public List<Apartment> getListApartmentEmpty() {
+        return contractRepository.getListApartmentEmpty();
+    }
+
+    @Override
+    public int getIdCustomerByName(String nameCustomer) {
+        return contractRepository.getIdCustomerByName(nameCustomer);
+    }
+
+    @Override
+    public int getIdStaffByName(String nameStaff) {
+        return contractRepository.getIdStaffByName(nameStaff);
+    }
+
+    @Override
+    public int getIdApartmentByName(String nameApartment) {
+        return contractRepository.getIdApartmentByName(nameApartment);
+    }
+
+    @Override
+    public int getDeposit(int idApartment) {
+        return contractRepository.getDeposit(idApartment);
+    }
+
 
 }

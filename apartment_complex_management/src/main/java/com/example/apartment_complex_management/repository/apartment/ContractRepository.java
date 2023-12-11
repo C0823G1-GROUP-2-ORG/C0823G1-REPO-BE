@@ -23,6 +23,9 @@ public class ContractRepository implements IContractRepository {
     private static final String SELECT_ALL_APARTMENT = "select can_ho.ma_can_ho,can_ho.ten_can_ho\n" +
             "from can_ho;";
 
+    private static final String SELECT_ALL_APARTMENT_EMPTY = "select can_ho.ma_can_ho,can_ho.ten_can_ho\n" +
+            "from can_ho where tinh_trang = 'Chưa có người thuê';";
+
     private static final String INSERT_CONTRACT = "call insert_contract(?,?,?,?,?,?)";
     private static final String DELETE_CONTRACT_BY_ID = "call delete_contract_by_id(?)";
     private static final String SORT_BY_DATE = "select * from hop_dong\n" +
@@ -33,6 +36,18 @@ public class ContractRepository implements IContractRepository {
             "where ho_ten like ?;";
 
     private static final String EXTEND_CONTRACT = "call contract_extension(?,?)";
+    private static final String CHANGE_STATUS_APARTMENT = "call change_status_apartment(?)";
+    private static final String GET_ID_CUSTOMER_BY_NAME = "select ma_khach_hang from khach_hang where ho_ten = ?";
+    private static final String GET_ID_STAFF_BY_NAME = "select ma_nhan_vien from nhan_vien where ho_ten = ?";
+
+    private static final String GET_ID_APARTMENT_BY_NAME = "select ma_can_ho from can_ho where ten_can_ho = ?";
+
+    private static final String GET_DEPOSIT_BY_ID_APARTMENT = "select chi_phi_thue\n" +
+            "from can_ho\n" +
+            "where ma_can_ho = ?;";
+
+
+
 
     @Override
     public List<Contract> showListContract() {
@@ -111,6 +126,9 @@ public class ContractRepository implements IContractRepository {
         Connection connection = BaseRepository.getConnection();
         try {
             CallableStatement statement = connection.prepareCall(INSERT_CONTRACT);
+            CallableStatement statement1 = connection.prepareCall(CHANGE_STATUS_APARTMENT);
+            statement1.setInt(1,contract.getIdApartment());
+            statement1.executeUpdate();
             statement.setString(1, contract.getContractDate());
             statement.setString(2, contract.getContractEndDate());
             statement.setInt(3, contract.getDeposit());
@@ -295,6 +313,95 @@ public class ContractRepository implements IContractRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Apartment> getListApartmentEmpty() {
+        Connection connection = BaseRepository.getConnection();
+        List<Apartment> apartments = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_APARTMENT_EMPTY);
+            ResultSet resultSet = statement.executeQuery();
+            int id;
+            String name;
+            while (resultSet.next()) {
+                id = resultSet.getInt("ma_can_ho");
+                name = resultSet.getString("ten_can_ho");
+                apartments.add(new Apartment(id, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return apartments;
+    }
+
+    @Override
+    public int getIdCustomerByName(String nameCustomer) {
+        Connection connection = BaseRepository.getConnection();
+        int id = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_ID_CUSTOMER_BY_NAME);
+            statement.setString(1,"'"+nameCustomer+"'");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                id = resultSet.getInt("ma_khach_hang");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    @Override
+    public int getIdStaffByName(String nameStaff) {
+        Connection connection = BaseRepository.getConnection();
+        int id = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_ID_STAFF_BY_NAME);
+            statement.setString(1,"'"+nameStaff+"'");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                id = resultSet.getInt("ma_nhan_vien");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    @Override
+    public int getIdApartmentByName(String nameApartment) {
+        Connection connection = BaseRepository.getConnection();
+        int id = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_ID_APARTMENT_BY_NAME);
+            statement.setString(1,"'"+nameApartment+"'");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                id = resultSet.getInt("ma_can_ho");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    @Override
+    public int getDeposit(int idApartment) {
+        Connection connection = BaseRepository.getConnection();
+        int deposit = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_DEPOSIT_BY_ID_APARTMENT);
+            statement.setInt(1,idApartment);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+              deposit = resultSet.getInt("chi_phi_thue");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return deposit;
     }
 
 

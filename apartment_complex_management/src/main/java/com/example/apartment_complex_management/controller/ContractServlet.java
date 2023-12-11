@@ -28,6 +28,8 @@ public class ContractServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");
         if (action == null) {
             action = "";
@@ -87,14 +89,26 @@ public class ContractServlet extends HttpServlet {
     private void addContract(HttpServletRequest req, HttpServletResponse resp) {
         String contractDate = req.getParameter("contractDate");
         String contractEndDate = req.getParameter("contractEndDate");
-        int deposit = Integer.parseInt(req.getParameter("deposit"));
-        int idCustomer = Integer.parseInt(req.getParameter("idCustomer"));
-        int idStaff = Integer.parseInt(req.getParameter("idStaff"));
-        int idApartment = Integer.parseInt(req.getParameter("idApartment"));
+//        int deposit = Integer.parseInt(req.getParameter("deposit"));
+
+        int idCustomer = Integer.parseInt(req.getParameter("customer"));
+        int idStaff = Integer.parseInt(req.getParameter("staff"));
+        int idApartment = Integer.parseInt(req.getParameter("apartment"));
+        int deposit = contractService.getDeposit(idApartment);
+
+
+
+
         Contract contract = new Contract(contractDate,contractEndDate,deposit,idCustomer,idStaff,idApartment);
         contractService.addContract(contract);
         RequestDispatcher dispatcher = req.getRequestDispatcher("contract/add-contract.jsp");
         req.setAttribute("message","Thêm hợp đồng thành công");
+        List<Staff> staff = contractService.getListStaff();
+        List<Customer> customers = contractService.getListCustomer();
+        List<Apartment> apartments = contractService.getListApartmentEmpty();
+        req.setAttribute("customer",customers);
+        req.setAttribute("staff",staff);
+        req.setAttribute("apartments",apartments);
         try {
             dispatcher.forward(req,resp);
         } catch (ServletException e) {
@@ -111,6 +125,8 @@ public class ContractServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");
         if (action == null) {
             action = "";
@@ -198,11 +214,6 @@ public class ContractServlet extends HttpServlet {
         req.setAttribute("list",contracts);
         req.setAttribute("apartments",apartments);
 
-
-        for (Staff staff1: staff){
-            System.out.println(staff1.getId());
-            System.out.println(staff1.getName());
-        }
         try {
             dispatcher.forward(req,resp);
         } catch (ServletException e) {
@@ -216,14 +227,30 @@ public class ContractServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         contractService.deleteContract(id);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("contract/list-contract.jsp");
+        List<Contract> contracts = contractService.showListContract();
+        req.setAttribute("message","Chấm dứt hợp đồng "+id+" thành công");
+        req.setAttribute("list",contracts);
+//        try {
+//            resp.sendRedirect("/contract-servlet");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         try {
-            resp.sendRedirect("/contract-servlet");
+            requestDispatcher.forward(req,resp);
+        } catch (ServletException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void showFordAddContract(HttpServletRequest req, HttpServletResponse resp) {
+        List<Staff> staff = contractService.getListStaff();
+        List<Customer> customers = contractService.getListCustomer();
+        List<Apartment> apartments = contractService.getListApartmentEmpty();
+        req.setAttribute("customer",customers);
+        req.setAttribute("staff",staff);
+        req.setAttribute("apartments",apartments);
         RequestDispatcher dispatcher = req.getRequestDispatcher("contract/add-contract.jsp");
         try {
             dispatcher.forward(req,resp);
@@ -245,11 +272,6 @@ public class ContractServlet extends HttpServlet {
         req.setAttribute("list",contracts);
         req.setAttribute("apartments",apartments);
 
-
-//        for (Staff staff1: staff){
-////            System.out.println(staff1.getId());
-////            System.out.println(staff1.getName());
-//        }
         try {
             dispatcher.forward(req,resp);
         } catch (ServletException e) {

@@ -29,4 +29,14 @@ public interface IContractService {
     Contract getContractById(int id);
 
     void contractExtension(int id, int month);
+
+    List<Apartment> getListApartmentEmpty();
+
+    int getIdCustomerByName(String nameCustomer);
+
+    int getIdStaffByName(String nameStaff);
+
+    int getIdApartmentByName(String nameApartment);
+
+    int getDeposit(int idApartment);
 }
