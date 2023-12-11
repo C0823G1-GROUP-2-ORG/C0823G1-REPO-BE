@@ -13,7 +13,11 @@ public interface IAccountService {
 
     void insertIntoAcccount(String useName, String password, Integer idAccountType);
 
-    void editAccount(Integer id, String password, Integer idAccountType, Integer isDelete);
+    void editAccount(Integer id, String password, Integer idAccountType);
 
     void removeAccount(Integer id);
+
+    void unblockAccount(Integer id);
+
+    List<Account> selectAccountByName(String name);
 }

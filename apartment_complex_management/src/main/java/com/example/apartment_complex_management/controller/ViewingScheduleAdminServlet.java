@@ -1,5 +1,7 @@
 package com.example.apartment_complex_management.controller;
 
+import com.example.apartment_complex_management.model.ViewingSchedule;
+import com.example.apartment_complex_management.model.ViewingScheduleDTO;
 import com.example.apartment_complex_management.service.IViewingScheduleService;
 import com.example.apartment_complex_management.service.ViewingScheduleService;
 import com.example.apartment_complex_management.utils.CustomerExample;
@@ -11,6 +13,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @WebServlet(name = "ViewingScheduleAdmin", urlPatterns = "/viewing-schedule-admin")
 public class ViewingScheduleAdminServlet extends HttpServlet {
@@ -32,9 +38,24 @@ public class ViewingScheduleAdminServlet extends HttpServlet {
             case "scheduleView":
                 insertScheduleView(req, resp);
                 break;
+            case "editSchedule":
+                editSchedule(req,resp);
+                break;
             default:
                 break;
         }
+    }
+
+    private void editSchedule(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.parseInt(req.getParameter("id"));
+        String viewDate = req.getParameter("viewDate");
+        iViewingScheduleService.editSchedule(id,viewDate);
+        List<ViewingScheduleDTO> viewingScheduleDTOList = iViewingScheduleService.selectAllViewScheduleDTO();
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-view-schedule.jsp");
+        String message = "Bạn đã chỉnh sửa lịch xem có id " + id + " thành công";
+        req.setAttribute("viewingScheduleDTOList",viewingScheduleDTOList);
+        req.setAttribute("message", message);
+        requestDispatcher.forward(req,resp);
     }
 
     private void insertScheduleView(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -87,7 +108,66 @@ public class ViewingScheduleAdminServlet extends HttpServlet {
             case "scheduleView":
                 showInputViewScheduleFrom(req, resp);
                 break;
+            case "listViewSchedule":
+                showListViewSchedule(req,resp);
+                break;
+            case "setUpSchedule":
+                setUpSchedule(req,resp);
+                break;
+            case "deleteOldSchedule":
+                deleteOldSchedule(req,resp);
+                break;
+            case "todaySchedule":
+                showListTodaySchedule(req,resp);
+                break;
+            case "notRepSchedule":
+                showListNotRepSchedule(req,resp);
+                break;
         }
+    }
+
+    private void showListNotRepSchedule(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<ViewingScheduleDTO> viewingScheduleDTOS = iViewingScheduleService.selectAllViewScheduleDTO();
+        List<ViewingScheduleDTO> newList = new ArrayList<>();
+        for (ViewingScheduleDTO viewingScheduleDTO :viewingScheduleDTOS){
+            if (Objects.equals(viewingScheduleDTO.getViewDate(), "")){
+                newList.add(viewingScheduleDTO);
+            }
+        }
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-view-schedule.jsp");
+        req.setAttribute("viewingScheduleDTOList",newList);
+        requestDispatcher.forward(req,resp);
+    }
+
+    private void showListTodaySchedule(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<ViewingScheduleDTO> viewingScheduleDTOS = iViewingScheduleService.selectAllViewScheduleDTO();
+        List<ViewingScheduleDTO> newList = new ArrayList<>();
+        String today = String.valueOf(LocalDate.now());
+        for (ViewingScheduleDTO viewingScheduleDTO :viewingScheduleDTOS){
+            if (Objects.equals(viewingScheduleDTO.getViewDate(), today)){
+                newList.add(viewingScheduleDTO);
+            }
+        }
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-view-schedule.jsp");
+        req.setAttribute("viewingScheduleDTOList",newList);
+        requestDispatcher.forward(req,resp);
+    }
+
+    private void deleteOldSchedule(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        iViewingScheduleService.deleteOldSchedule();
+        showListViewSchedule(req,resp);
+    }
+
+    private void setUpSchedule(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        iViewingScheduleService.setUpSchedule();
+        showListViewSchedule(req,resp);
+    }
+
+    private void showListViewSchedule(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<ViewingScheduleDTO> viewingScheduleDTOList = iViewingScheduleService.selectAllViewScheduleDTO();
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-view-schedule.jsp");
+        req.setAttribute("viewingScheduleDTOList",viewingScheduleDTOList);
+        requestDispatcher.forward(req,resp);
     }
 
     private void showInputViewScheduleFrom(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

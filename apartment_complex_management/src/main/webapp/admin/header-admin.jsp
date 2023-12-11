@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<nav class="navbar navbar-expand-lg bg-white px-4 mt-2" style="padding: 0">
+<nav class="navbar navbar-expand-lg bg-white px-4 mt-2" style="padding: 0;position: relative">
     <div class="container-fluid ">
         <div>
             <a class="navbar-brand" href="#">
@@ -28,7 +28,8 @@
             </div>
         </div>
         <div style="left: 0">
-            <div class="collapse navbar-collapse ">
+
+            <div class="collapse navbar-collapse">
                 <form id="search-box">
                     <input type="text" id="search-text" placeholder="Bạn muốn tìm gì ?" required>
                     <button id="search-btn"><i class="fa-solid fa-magnifying-glass"
@@ -45,6 +46,7 @@
 
         </div>
     </div>
+    <div style="position: absolute; top: 0;right: 1em;color: rgb(119,119,119);font-weight: bold">Xin chào ${sessionScope.useName}!</div>
 </nav>
 <div style="background: rgb(246,245,243) ">
     <div class="container px-0 py-3 mt-2">
@@ -100,7 +102,30 @@
                          width="23" alt=""/>
                 </div>
                 <div class="d-flex justify-content-center mt-2">
-                    <a href="/apartment-admin?action=family" style="text-decoration: none; color: black"><h6 class=" px-2">
+                    <a href="/viewing-schedule-admin?action=listViewSchedule" style="text-decoration: none; color: black"><h6 class=" px-2">
+                        Lịch xem</h6></a>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6" style="width: 12%">
+                <div class="d-flex justify-content-center">
+
+                    <img src="https://a0.muscache.com/pictures/7630c83f-96a8-4232-9a10-0398661e2e6f.jpg" height="23"
+                         width="23" alt=""/>
+                </div>
+                <div class="d-flex justify-content-center mt-2">
+                    <a href="/apartment-admin?action=listApartment" style="text-decoration: none; color: black"><h6 class=" px-2">
+                        Căn hộ</h6></a>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6" style="width: 12%">
+                <div class="d-flex justify-content-center">
+
+                    <img src="https://a0.muscache.com/pictures/7630c83f-96a8-4232-9a10-0398661e2e6f.jpg" height="23"
+                         width="23" alt=""/>
+                </div>
+                <div class="d-flex justify-content-center mt-2">
+                    <a href="/staff-admin?action=listAllStaff" style="text-decoration: none; color: black"><h6 class=" px-2">
                         Nhân viên</h6></a>
                 </div>
             </div>
@@ -111,31 +136,8 @@
                          width="23" alt=""/>
                 </div>
                 <div class="d-flex justify-content-center mt-2">
-                    <a href="/apartment-admin?action=officetel" style="text-decoration: none; color: black"><h6 class=" px-2">
+                    <a href="/customer-admin?action=listCustomer" style="text-decoration: none; color: black"><h6 class=" px-2">
                         Khách hàng</h6></a>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-6" style="width: 12%">
-                <div class="d-flex justify-content-center">
-
-                    <img src="https://a0.muscache.com/pictures/7630c83f-96a8-4232-9a10-0398661e2e6f.jpg" height="23"
-                         width="23" alt=""/>
-                </div>
-                <div class="d-flex justify-content-center mt-2">
-                    <a href="/apartment-admin?action=officetel" style="text-decoration: none; color: black"><h6 class=" px-2">
-                        Hợp đồng</h6></a>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6" style="width: 12%">
-                <div class="d-flex justify-content-center">
-
-                    <img src="https://a0.muscache.com/pictures/7630c83f-96a8-4232-9a10-0398661e2e6f.jpg" height="23"
-                         width="23" alt=""/>
-                </div>
-                <div class="d-flex justify-content-center mt-2">
-                    <a href="/apartment-admin?action=officetel" style="text-decoration: none; color: black"><h6 class=" px-2">
-                        Căn hộ</h6></a>
                 </div>
             </div>
         </div>

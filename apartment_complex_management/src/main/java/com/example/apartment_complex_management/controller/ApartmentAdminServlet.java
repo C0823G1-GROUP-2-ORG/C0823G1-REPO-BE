@@ -1,9 +1,8 @@
 package com.example.apartment_complex_management.controller;
 
 import com.example.apartment_complex_management.model.Apartment;
-import com.example.apartment_complex_management.service.AccountService;
+import com.example.apartment_complex_management.model.ApartmentDTO;
 import com.example.apartment_complex_management.service.ApartmentService;
-import com.example.apartment_complex_management.service.IAccountService;
 import com.example.apartment_complex_management.service.IApartmentService;
 
 import javax.servlet.RequestDispatcher;
@@ -15,20 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet(name = "ApartmentAdminServlet", urlPatterns = "/apartment-admin")
 public class ApartmentAdminServlet extends HttpServlet {
     private IApartmentService iApartmentService;
-    private IAccountService iAccountService;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         iApartmentService = new ApartmentService();
-        iAccountService = new AccountService();
     }
 
 
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         if (action == null) {
@@ -71,13 +68,52 @@ public class ApartmentAdminServlet extends HttpServlet {
             case "officetel":
                 showListOfficetel(req, resp);
                 break;
-            case "account":
-                showListOfficetel(req, resp);
+            case "listApartment":
+                showListApartmentDTO(req,resp);
+                break;
+            case "rented":
+                showListApartmentDTORented(req,resp);
+                break;
+            case "notRented":
+                showListApartmentDTONotRented(req,resp);
                 break;
             default:
                 showHomeApartment(req, resp);
                 break;
         }
+    }
+
+    private void showListApartmentDTONotRented(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<ApartmentDTO> apartmentDTOList = iApartmentService.selectListApartmentDTO();
+        List<ApartmentDTO> apartmentDTOS = new ArrayList<>();
+        for (ApartmentDTO apartmentDTO :apartmentDTOList){
+            if (Objects.equals(apartmentDTO.getStatus(), "Chưa cho thuê")){
+                apartmentDTOS.add(apartmentDTO);
+            }
+        }
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-apartment.jsp");
+        req.setAttribute("apartmentDTOList",apartmentDTOS);
+        requestDispatcher.forward(req,resp);
+    }
+
+    private void showListApartmentDTORented(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<ApartmentDTO> apartmentDTOList = iApartmentService.selectListApartmentDTO();
+        List<ApartmentDTO> apartmentDTOS = new ArrayList<>();
+        for (ApartmentDTO apartmentDTO :apartmentDTOList){
+            if (Objects.equals(apartmentDTO.getStatus(), "Đã cho thuê")){
+                apartmentDTOS.add(apartmentDTO);
+            }
+        }
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-apartment.jsp");
+        req.setAttribute("apartmentDTOList",apartmentDTOS);
+        requestDispatcher.forward(req,resp);
+    }
+
+    private void showListApartmentDTO(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<ApartmentDTO> apartmentDTOList = iApartmentService.selectListApartmentDTO();
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-apartment.jsp");
+        req.setAttribute("apartmentDTOList",apartmentDTOList);
+        requestDispatcher.forward(req,resp);
     }
 
     private void showListOfficetel(HttpServletRequest req, HttpServletResponse resp) {
@@ -195,4 +231,29 @@ public class ApartmentAdminServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
+
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String action = req.getParameter("action");
+//        if (action == null){
+//            action = "";
+//        }
+//        switch (action){
+//            case "editRoom":
+//                editRoom(req,resp);
+//                break;
+//        }
+//    }
+//
+//    private void editRoom(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        Integer id = Integer.parseInt(req.getParameter("id"));
+//        Double rentalCost = Double.parseDouble("rentalCost");
+//        iApartmentService.editApartment(id,rentalCost);
+//        List<ApartmentDTO> apartmentDTOList = iApartmentService.selectListApartmentDTO();
+//        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-apartment.jsp");
+//        String message = "Bạn đã sửa giá căn hộ có id " + id + " thành công!";
+//        req.setAttribute("apartmentDTOList",apartmentDTOList);
+//        req.setAttribute("message", message);
+//        requestDispatcher.forward(req,resp);
+//    }
 }

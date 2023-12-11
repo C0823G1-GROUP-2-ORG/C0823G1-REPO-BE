@@ -96,9 +96,15 @@
                                     </a>
                                 </div>
                             </article>
-                            <div class="card-body ">
+                            <div class="card-body " style="position: relative">
+                                <c:if test="${apartment.getStatus() == 'Chưa cho thuê'}">
+                                    <button type="button" class="btn btn-success" style="position: absolute;top: 15px;right: 15px">Chưa cho thuê</button>
+                                </c:if>
+                                <c:if test="${apartment.getStatus() == 'Đã cho thuê'}">
+                                    <button type="button" class="btn btn-danger" style="position: absolute;top: 15px;right: 15px">Đã cho thuê</button>
+                                </c:if>
                                 <h5 class="card-title">Căn hộ: ${apartment.getName()}</h5>
-                                <p class="card-text">Tình trạng: ${apartment.getStatus()}</p>
+                                <h5 class="card-title">Số tầng: ${apartment.getIdFloors()}</h5>
                                 <p class="_tyxjp1">Chi phí thuê:
                                     <fmt:setLocale value="vi_VN" />
                                     <fmt:setBundle basename="path_to_your_resource_bundle" />

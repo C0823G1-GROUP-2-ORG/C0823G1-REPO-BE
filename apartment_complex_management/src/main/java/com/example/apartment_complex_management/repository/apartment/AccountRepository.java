@@ -10,8 +10,9 @@ import java.util.Objects;
 public class AccountRepository implements IAccountRepository {
     private final String CALL_LIST_ACCOUNT = "call danh_sach_tai_khoan();";
     private final String INSERT_INTO_ACCOUNT = "call them_tai_khoan(?,?,?);";
-    private final String EDIT_ACCOUNT = "update tai_khoan set mat_khau = ?, ma_loai_tai_khoan = ?, is_delete = ? where ma_tai_khoan = ?;";
+    private final String EDIT_ACCOUNT = "update tai_khoan set mat_khau = ?, ma_loai_tai_khoan = ? where ma_tai_khoan = ?;";
     private final String REMOVE_ACCOUNT = "update tai_khoan set is_delete = 1 where ma_tai_khoan = ?;";
+    private final String UNBLOCK_ACCOUNT = "update tai_khoan set is_delete = 0 where ma_tai_khoan = ?;";
 
     @Override
     public List<Account> selectAllAccount() {
@@ -69,7 +70,7 @@ public class AccountRepository implements IAccountRepository {
     }
 
     @Override
-    public void editAccount(Integer id, String password, Integer idAccountType, Integer isDelete) {
+    public void editAccount(Integer id, String password, Integer idAccountType) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try{
@@ -77,8 +78,7 @@ public class AccountRepository implements IAccountRepository {
             preparedStatement = connection.prepareStatement(EDIT_ACCOUNT);
             preparedStatement.setString(1,password);
             preparedStatement.setInt(2,idAccountType);
-            preparedStatement.setInt(3, isDelete);
-            preparedStatement.setInt(4,id);
+            preparedStatement.setInt(3,id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -97,5 +97,31 @@ public class AccountRepository implements IAccountRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void unblockAccount(Integer id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = BaseRepository.getConnection();
+            preparedStatement = connection.prepareStatement(UNBLOCK_ACCOUNT);
+            preparedStatement.setInt(1,id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Account> selectAccountByName(String name) {
+        List<Account> accounts = selectAllAccount();
+        List<Account> accounts1 = new ArrayList<>();
+        for (Account account:accounts){
+            if (account.getAccountName().toLowerCase().contains(name.toLowerCase())){
+                accounts1.add(account);
+            }
+        }
+        return accounts1;
     }
 }

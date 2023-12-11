@@ -89,22 +89,22 @@
                  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="/products?action=search" method="post">
+                        <form action="/account-admin?action=search" method="post">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel-4">Nhập tên sản phẩm bạn muốn tìm</h5>
+                                <h5 class="modal-title" id="exampleModalLabel-4">Nhập tên tài khoản bạn muốn tìm</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <table>
                                     <tr>
-                                        <td>Tên sản phẩm:</td>
+                                        <td>Tên tài khoản:</td>
                                         <td><input type="text" name="name" id="name2" style="width: 180%"></td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <input type="submit" class="btn btn-primary" value="Tìm kiếm sản phẩm">
+                                <input type="submit" class="btn btn-primary" value="Tìm kiếm tài khoản">
                             </div>
                         </form>
                     </div>
@@ -123,7 +123,7 @@
             <th scope="col" style="color: #F5DEB3;width: 15%">Loại tài khoản</th>
             <th scope="col" style="color: #F5DEB3;width: 15%">Tình trạng</th>
             <th scope="col" style="color: #F5DEB3;width: 15%">Sửa</th>
-            <th scope="col" style="color: #F5DEB3;width: 15%">Xóa</th>
+            <th scope="col" style="color: #F5DEB3;width: 15%">Khóa</th>
         </tr>
         <c:forEach items='${requestScope["accounts"]}' var="account" varStatus="loop">
             <tr class="align-middle">
@@ -134,18 +134,18 @@
                     <c:out value="${'Admin'}"></c:out>
                 </c:if>
                     <c:if test="${account.getIdAccountType() == 2}">
-                        <c:out value="${'Staff'}"></c:out>
+                        <c:out value="${'Nhân viên'}"></c:out>
                     </c:if>
                     <c:if test="${account.getIdAccountType() == 1}">
-                        <c:out value="${'Customer'}"></c:out>
+                        <c:out value="${'Khách hàng'}"></c:out>
                     </c:if>
                 </td>
                 <td>
                     <c:if test="${account.getIsDeleted() == 0}">
-                        <c:out value="${'Đang sử dụng'}"></c:out>
+                        <c:out value="${'Đang mở'}"></c:out>
                     </c:if>
                     <c:if test="${account.getIsDeleted() == 1}">
-                        <c:out value="${'Không sử dụng'}"></c:out>
+                        <c:out value="${'Đang khóa'}"></c:out>
                     </c:if>
                 <td>
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal"
@@ -181,19 +181,18 @@
                                                     <select name="idAccountType" style="width: 350px">
                                                         <option value="1">Khách hàng</option>
                                                         <option value="2">Nhân viên</option>
-                                                        <option value="3">Admin</option>
                                                     </select>
                                                 </label>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Tình trạng:</td>
-                                                <td><label>
-                                                    <select name="isDelete" style="width: 350px">
-                                                        <option value="0">Đang sử dụng</option>
-                                                        <option value="1">Không sử dụng</option>
-                                                    </select>
-                                                </label>
+                                                <td><c:if test="${account.getIsDeleted() == 0}">
+                                                    <c:out value="${'Đang mở'}"></c:out>
+                                                </c:if>
+                                                    <c:if test="${account.getIsDeleted() == 1}">
+                                                        <c:out value="${'Đang khóa'}"></c:out>
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </table>
@@ -207,64 +206,126 @@
                     </div>
                 </td>
                 <td>
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal"
-                       data-bs-target="#exampleModal2${account.getId()}">
-                        Xóa
-                    </a>
-                    <div class="modal fade" id="exampleModal2${account.getId()}" tabindex="-1"
-                         aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form action="/account-admin?action=removeAccount&id=${account.getId()}" method="post">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel2">Xác nhận muốn xóa tài khoản này không?</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table>
-                                            <tr>
-                                                <td style="width: 100px">Tên tài khoản:</td>
-                                                <td>${account.getAccountName()}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Mật khẩu</td>
-                                                <td>${account.getPassword()}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loại tài khoản:</td>
-                                                <td>
-                                                    <c:if test="${account.getIdAccountType() == 3}">
-                                                        <c:out value="${'Admin'}"></c:out>
+                    <c:if test="${account.getIsDeleted() == 0}">
+                        <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                           data-bs-target="#exampleModal2${account.getId()}">
+                            Khóa
+                        </a>
+                        <div class="modal fade" id="exampleModal2${account.getId()}" tabindex="-1"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="/account-admin?action=removeAccount&id=${account.getId()}" method="post">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel2">Xác nhận muốn xóa tài khoản này không?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table>
+                                                <tr>
+                                                    <td style="width: 150px">Tên tài khoản:</td>
+                                                    <td>${account.getAccountName()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mật khẩu</td>
+                                                    <td>${account.getPassword()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Loại tài khoản:</td>
+                                                    <td>
+                                                        <c:if test="${account.getIdAccountType() == 3}">
+                                                            <c:out value="${'Admin'}"></c:out>
+                                                        </c:if>
+                                                        <c:if test="${account.getIdAccountType() == 2}">
+                                                            <c:out value="${'Staff'}"></c:out>
+                                                        </c:if>
+                                                        <c:if test="${account.getIdAccountType() == 1}">
+                                                            <c:out value="${'Customer'}"></c:out>
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tình trạng:</td>
+                                                    <td> <c:if test="${account.getIsDeleted() == 0}">
+                                                        <c:out value="${'Đang sử dụng'}"></c:out>
                                                     </c:if>
-                                                    <c:if test="${account.getIdAccountType() == 2}">
-                                                        <c:out value="${'Staff'}"></c:out>
-                                                    </c:if>
-                                                    <c:if test="${account.getIdAccountType() == 1}">
-                                                        <c:out value="${'Customer'}"></c:out>
-                                                    </c:if>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tình trạng:</td>
-                                                <td> <c:if test="${account.getIsDeleted() == 0}">
-                                                    <c:out value="${'Đang sử dụng'}"></c:out>
-                                                </c:if>
-                                                    <c:if test="${account.getIsDeleted() == 1}">
-                                                        <c:out value="${'Không sử dụng'}"></c:out>
-                                                    </c:if>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <input type="submit" class="btn btn-primary" value="Xóa tài khoản">
-                                    </div>
-                                </form>
+                                                        <c:if test="${account.getIsDeleted() == 1}">
+                                                            <c:out value="${'Không sử dụng'}"></c:out>
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="submit" class="btn btn-primary" value="Khóa tài khoản">
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </c:if>
+                    <c:if test="${account.getIsDeleted() == 1}">
+                        <a href="#" class="btn btn-success" data-bs-toggle="modal"
+                           data-bs-target="#exampleModal3${account.getId()}">
+                            Mở
+                        </a>
+                        <div class="modal fade" id="exampleModal3${account.getId()}" tabindex="-1"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="/account-admin?action=unblockAccount&id=${account.getId()}" method="post">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel3">Xác nhận muốn mở tài khoản này không?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table>
+                                                <tr>
+                                                    <td style="width: 150px">Tên tài khoản:</td>
+                                                    <td>${account.getAccountName()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mật khẩu</td>
+                                                    <td>${account.getPassword()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Loại tài khoản:</td>
+                                                    <td>
+                                                        <c:if test="${account.getIdAccountType() == 3}">
+                                                            <c:out value="${'Admin'}"></c:out>
+                                                        </c:if>
+                                                        <c:if test="${account.getIdAccountType() == 2}">
+                                                            <c:out value="${'Nhân viên'}"></c:out>
+                                                        </c:if>
+                                                        <c:if test="${account.getIdAccountType() == 1}">
+                                                            <c:out value="${'Khách hàng'}"></c:out>
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tình trạng:</td>
+                                                    <td> <c:if test="${account.getIsDeleted() == 0}">
+                                                        <c:out value="${'Đang mở'}"></c:out>
+                                                    </c:if>
+                                                        <c:if test="${account.getIsDeleted() == 1}">
+                                                            <c:out value="${'Đang khóa'}"></c:out>
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="submit" class="btn btn-primary" value="Mở tài khoản">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>

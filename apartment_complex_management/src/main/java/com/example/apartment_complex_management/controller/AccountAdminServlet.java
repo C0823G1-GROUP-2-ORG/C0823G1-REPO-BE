@@ -35,7 +35,16 @@ public class AccountAdminServlet extends HttpServlet {
             case "addAccount":
                 showAddAccountForm(req,resp);
                 break;
+
         }
+    }
+
+    private void searchAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        List<Account> accounts = iAccountService.selectAccountByName(name);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-account.jsp");
+        req.setAttribute("accounts",accounts);
+        requestDispatcher.forward(req,resp);
     }
 
     private void showAddAccountForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -66,13 +75,30 @@ public class AccountAdminServlet extends HttpServlet {
             case "removeAccount":
                 removeAccount(req,resp);
                 break;
+            case "unblockAccount":
+                unblockAccount(req,resp);
+                break;
+            case "search":
+                searchAccount(req,resp);
+                break;
         }
+    }
+
+    private void unblockAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.parseInt(req.getParameter("id"));
+        iAccountService.unblockAccount(id);
+        String message = "Bạn đã mở tài khoản có id " + id + " thành công!";
+        req.setAttribute("message",message);
+        List<Account> accounts = iAccountService.selectAllAccount();
+        req.setAttribute("accounts",accounts);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-account.jsp");
+        requestDispatcher.forward(req,resp);
     }
 
     private void removeAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = Integer.parseInt(req.getParameter("id"));
         iAccountService.removeAccount(id);
-        String message = "Bạn đã xóa sản phẩm có id " + id + " thành công!";
+        String message = "Bạn đã xóa tài khoản có id " + id + " thành công!";
         req.setAttribute("message",message);
         List<Account> accounts = iAccountService.selectAllAccount();
         req.setAttribute("accounts",accounts);
@@ -84,8 +110,7 @@ public class AccountAdminServlet extends HttpServlet {
         Integer id = Integer.parseInt(req.getParameter("id"));
         String password = req.getParameter("password");
         Integer idAccountType = Integer.parseInt(req.getParameter("idAccountType"));
-        Integer isDelete = Integer.parseInt(req.getParameter("isDelete"));
-        iAccountService.editAccount(id,password,idAccountType,isDelete);
+        iAccountService.editAccount(id,password,idAccountType);
         List<Account> accounts = iAccountService.selectAllAccount();
         String message = "Bạn đã cập nhật tài khoản có id " + id + " thành công!";
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("admin/list-account.jsp");

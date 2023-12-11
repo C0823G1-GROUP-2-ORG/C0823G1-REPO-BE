@@ -38,12 +38,22 @@ public class AccountService implements IAccountService{
     }
 
     @Override
-    public void editAccount(Integer id, String password, Integer idAccountType, Integer isDelete) {
-        iAccountRepository.editAccount(id,password,idAccountType, isDelete);
+    public void editAccount(Integer id, String password, Integer idAccountType) {
+        iAccountRepository.editAccount(id,password,idAccountType);
     }
 
     @Override
     public void removeAccount(Integer id) {
         iAccountRepository.removeAccount(id);
+    }
+
+    @Override
+    public void unblockAccount(Integer id) {
+        iAccountRepository.unblockAccount(id);
+    }
+
+    @Override
+    public List<Account> selectAccountByName(String name) {
+        return iAccountRepository.selectAccountByName(name);
     }
 }

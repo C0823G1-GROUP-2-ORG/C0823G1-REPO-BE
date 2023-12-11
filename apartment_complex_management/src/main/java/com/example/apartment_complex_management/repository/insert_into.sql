@@ -95,9 +95,85 @@ create procedure them_lich_xem(n_ma_can_ho int,n_ten_khach_hang varchar(45),n_so
 begin
 insert into lich_xem(ma_can_ho,ten_khach_hang,so_dien_thoai,email,tinh_trang)
 values(n_ma_can_ho,n_ten_khach_hang,n_so_dien_thoai,n_email,n_tinh_trang);
-update can_ho
-set tinh_trang = "Đã có lịch xem"
-where ma_can_ho = n_ma_can_ho;
 end
 // delimiter ;
+
+delimiter //
+create procedure danh_sach_tai_khoan()
+begin
+select * from tai_khoan;
+end;
+// delimiter ;
+
+call danh_sach_tai_khoan();
+
+delimiter //
+create procedure them_tai_khoan(n_ten_tai_khoan varchar(45),n_mat_khau varchar(45), n_ma_loai_tai_khoan int)
+begin
+insert into tai_khoan(ten_tai_khoan,mat_khau, ma_loai_tai_khoan)
+values(n_ten_tai_khoan,n_mat_khau, n_ma_loai_tai_khoan);
+end;
+// delimiter ;
+
+
+delimiter //
+create procedure danh_sach_lich_xem()
+begin
+select ma_lich_xem, ten_can_ho, ten_khach_hang, so_dien_thoai, email, ngay_xem_can_ho, lich_xem.tinh_trang from lich_xem 
+join can_ho on lich_xem.ma_can_ho = can_ho.ma_can_ho
+where lich_xem.is_delete = 0;
+end;
+// delimiter ;
+
+call danh_sach_lich_xem;
+
+UPDATE `apartment_management`.`lich_xem` SET `ngay_xem_can_ho` = NULL WHERE (`ma_lich_xem` = '4');
+
+
+
+delimiter //
+create procedure danh_sach_can_ho()
+begin
+select ma_can_ho,ten_can_ho,dien_tich,chi_phi_thue,so_nguoi_toi_da,mo_ta_tien_nghi,ten_loai_can_ho,ten_kieu_thue,so_tang,tinh_trang,can_ho.is_delete from can_ho
+join loai_can_ho on can_ho.ma_loai_can_ho = loai_can_ho.ma_loai_can_ho
+join kieu_thue on kieu_thue.ma_kieu_thue = can_ho.ma_kieu_thue
+join so_tang on so_tang.ma_so_tang = can_ho.ma_so_tang;
+end;
+// delimiter ;
+
+call danh_sach_can_ho();
+
+delimiter //
+create procedure danh_sach_nhan_vien()
+begin
+select ma_nhan_vien, ho_ten, ngay_sinh, gioi_tinh, so_cmnd, luong, so_dien_thoai, email, dia_chi, ten_bo_phan, ten_tai_khoan, nhan_vien.is_delete from nhan_vien
+join bo_phan on nhan_vien.ma_bo_phan = bo_phan.ma_bo_phan
+join tai_khoan on nhan_vien.ma_tai_khoan = tai_khoan.ma_tai_khoan;
+end;
+// delimiter ;
+
+call danh_sach_nhan_vien();
+
+delimiter //
+create procedure xoa_nhan_vien(id int)
+begin
+declare ma_tk int;
+    select tai_khoan.ma_tai_khoan into ma_tk from tai_khoan join nhan_vien on tai_khoan.ma_tai_khoan = nhan_vien.ma_tai_khoan where nhan_vien.ma_nhan_vien = id;
+    update nhan_vien set is_delete = 1 where ma_nhan_vien = id;
+    update tai_khoan set is_delete = 1 where ma_tai_khoan = ma_tk;
+end;
+// delimiter ;
+
+delimiter //
+create procedure phuc_hoi_nhan_vien(id int)
+begin
+declare ma_tk int;
+    select tai_khoan.ma_tai_khoan into ma_tk from tai_khoan join nhan_vien on tai_khoan.ma_tai_khoan = nhan_vien.ma_tai_khoan where nhan_vien.ma_nhan_vien = id;
+    update nhan_vien set is_delete = 0 where ma_nhan_vien = id;
+    update tai_khoan set is_delete = 0 where ma_tai_khoan = ma_tk;
+end;
+// delimiter ;
+
+insert into nhan_vien(ho_ten,ngay_sinh,gioi_tinh,so_cmnd,luong,so_dien_thoai,email,dia_chi,ma_bo_phan,ma_tai_khoan)
+values(?,?,?,?,?,?,?,?,?,?);
 

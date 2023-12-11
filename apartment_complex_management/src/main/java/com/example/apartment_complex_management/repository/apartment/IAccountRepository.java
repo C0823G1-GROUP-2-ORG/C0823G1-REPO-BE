@@ -11,7 +11,11 @@ public interface IAccountRepository {
 
     void insertIntoAccount(String useName, String password, Integer idAccountType);
 
-    void editAccount(Integer id, String password, Integer idAccountType, Integer isDelete);
+    void editAccount(Integer id, String password, Integer idAccountType);
 
     void removeAccount(Integer id);
+
+    void unblockAccount(Integer id);
+
+    List<Account> selectAccountByName(String name);
 }

@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,11 @@ public class ApartmentServlet extends HttpServlet {
         String password = req.getParameter("password");
         boolean admin = iAccountService.checkAdminAccount(useName,password);
         RequestDispatcher requestDispatcher;
+        HttpSession session;
         if (admin){
+            session = req.getSession();
+            session.setAttribute("useName",useName);
+            session.setAttribute("password",password);
             resp.sendRedirect("admin/home-admin.jsp");
 
         } else {
