@@ -4,16 +4,19 @@ public class Customer {
     private Integer id;
     private String name;
     private String dateOfBirth;
-    private Integer gender;
+    private Boolean gender;
     private String numberCMND;
     private String numberPhone;
     private String email;
     private String address;
     private Integer idAccount;
-    private Integer isDeleted;
+    private Boolean isDeleted;
 
-    public Customer(Integer id, String name, String dateOfBirth, Integer gender, String numberCMND,
-                    String numberPhone, String email, String address, Integer idAccount, Integer isDeleted) {
+    public Customer() {
+    }
+
+    public Customer(Integer id, String name, String dateOfBirth, Boolean gender, String numberCMND,
+                    String numberPhone, String email, String address, Integer idAccount, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -26,7 +29,7 @@ public class Customer {
         this.isDeleted = isDeleted;
     }
 
-    public Customer(Integer id, String name, String dateOfBirth, Integer gender, String numberCMND,
+    public Customer(Integer id, String name, String dateOfBirth, Boolean gender, String numberCMND,
                     String numberPhone, String email, String address, Integer idAccount) {
         this.id = id;
         this.name = name;
@@ -37,6 +40,18 @@ public class Customer {
         this.email = email;
         this.address = address;
         this.idAccount = idAccount;
+    }
+
+    public Customer(String name, String dateOfBirth, Boolean gender, String numberCMND, String numberPhone, String email, String address, Integer idAccount, Boolean isDeleted) {
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.numberCMND = numberCMND;
+        this.numberPhone = numberPhone;
+        this.email = email;
+        this.address = address;
+        this.idAccount = idAccount;
+        this.isDeleted = isDeleted;
     }
 
     public Integer getId() {
@@ -63,11 +78,11 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Integer getGender() {
+    public Boolean getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(Boolean gender) {
         this.gender = gender;
     }
 
@@ -111,11 +126,11 @@ public class Customer {
         this.idAccount = idAccount;
     }
 
-    public Integer getIsDeleted() {
+    public Boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
+    public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 }

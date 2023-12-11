@@ -111,7 +111,7 @@
                          width="23" alt=""/>
                 </div>
                 <div class="d-flex justify-content-center mt-2">
-                    <a href="/apartment-admin?action=officetel" style="text-decoration: none; color: black"><h6 class=" px-2">
+                    <a href="/customer-servlet?action=listCustomer" style="text-decoration: none; color: black"><h6 class=" px-2">
                         Khách hàng</h6></a>
                 </div>
             </div>

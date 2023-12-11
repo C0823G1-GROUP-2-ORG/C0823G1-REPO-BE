@@ -35,6 +35,7 @@
     </style>
 </head>
 <body>
+<jsp:include page="header-admin.jsp"/>
 <section>
     <div class="container flex" style="width: 70%; padding: 4.5em">
         <form style="width: 100%; position: relative" method="post">
