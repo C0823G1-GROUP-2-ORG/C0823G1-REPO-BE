@@ -92,12 +92,6 @@
                 Toàn bộ khách hàng
             </a>
         </td>
-        <td>
-            <a href="/customer-admin?action=addStaff" class="btn btn-primary"
-               data-bs-target="#exampleModal">
-                Thêm mới khách hàng
-            </a>
-        </td>
     </tr>
 </table>
 <br>

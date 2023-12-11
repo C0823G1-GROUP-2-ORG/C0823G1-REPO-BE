@@ -80,7 +80,7 @@
                         <div class="card__container">
                             <article class="card__article">
                                 <img src="${apartment.getImage()}"
-                                     class="card__img">
+                                     class="card__img" alt="">
                                 <div class="card__data">
                                     <span class="card__description"> Căn hộ: ${apartment.getName()}  </span>
                                     <c:if test="${apartment.getIdApartmentType() == 1}">
@@ -109,10 +109,18 @@
                                     <fmt:setLocale value="vi_VN" />
                                     <fmt:setBundle basename="path_to_your_resource_bundle" />
                                     <fmt:formatNumber value="${apartment.getRentalCosts()}" type="currency" currencyCode="VND" /></p>
-                                <a class="btn btn-primary btn-outline-danger" href="/viewing-schedule?action=scheduleView&id=${apartment.getId()}"
-                                     style=" color: white; width: 400px;border: none">
-                                    Đặt lịch xem
-                                </a>
+                                <c:if test="${apartment.getStatus() == 'Chưa cho thuê'}">
+                                    <a class="btn btn-primary btn-outline-danger" href="/viewing-schedule?action=scheduleView&id=${apartment.getId()}"
+                                       style=" color: white; width: 400px;border: none">
+                                        Đặt lịch xem
+                                    </a>
+                                </c:if>
+                                <c:if test="${apartment.getStatus() == 'Đã cho thuê'}">
+                                    <div class="btn btn-outline-danger"
+                                       style=" color: white; width: 400px;border: none; background-color: #535c68">
+                                        Đã cho thuê
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>

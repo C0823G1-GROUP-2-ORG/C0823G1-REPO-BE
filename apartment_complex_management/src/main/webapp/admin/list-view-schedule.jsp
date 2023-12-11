@@ -75,12 +75,6 @@
 <table>
     <tr>
         <td>
-            <a href="/viewing-schedule-admin?action=setUpSchedule" class="btn btn-primary"
-               data-bs-target="#exampleModal">
-                Lên lịch xem
-            </a>
-        </td>
-        <td>
             <a href="/viewing-schedule-admin?action=deleteOldSchedule" class="btn btn-primary"
                data-bs-target="#exampleModal">
                 Xóa lịch xem cũ
@@ -112,12 +106,13 @@
         <tr style="background-color: rebeccapurple">
             <th scope="col" style="color: #F5DEB3;width: 5%">Stt</th>
             <th scope="col" style="color: #F5DEB3;width: 10%">Tên căn hộ</th>
-            <th scope="col" style="color: #F5DEB3;width: 20%">Tên khách hàng</th>
-            <th scope="col" style="color: #F5DEB3;width: 12.5%">Số điện thoại</th>
-            <th scope="col" style="color: #F5DEB3;width: 22.5%">Email</th>
+            <th scope="col" style="color: #F5DEB3;width: 16%">Tên khách hàng</th>
+            <th scope="col" style="color: #F5DEB3;width: 10.5%">Số điện thoại</th>
+            <th scope="col" style="color: #F5DEB3;width: 20.5%">Email</th>
             <th scope="col" style="color: #F5DEB3;width: 15%">Ngày xem căn hộ</th>
             <th scope="col" style="color: #F5DEB3;width: 12%">Tình trạng</th>
             <th scope="col" style="color: #F5DEB3;width: 8%">Sửa</th>
+            <th scope="col" style="color: #F5DEB3;width: 8%">Phản hồi</th>
         </tr>
         <c:forEach items='${requestScope["viewingScheduleDTOList"]}' var="schedule" varStatus="loop">
             <tr class="align-middle">
@@ -147,7 +142,8 @@
                          aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/viewing-schedule-admin?action=editSchedule&id=${schedule.getId()}" method="post">
+                                <form action="/viewing-schedule-admin?action=editSchedule&id=${schedule.getId()}"
+                                      method="post">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel1">Sửa thông tin lịch xem</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -184,13 +180,70 @@
                                         </table>
                                     </div>
                                     <div class="modal-footer">
-                                        <button onclick="showAlert('${requestScope["message"]}')" type="submit" class="btn btn-primary" value="Lưu thay đổi">Lưu thay đổi</button>
+                                        <button onclick="showAlert('${requestScope["message"]}')" type="submit"
+                                                class="btn btn-primary" value="Lưu thay đổi">Lưu thay đổi
+                                        </button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </td>
+                <c:if test="${schedule.getStatus() == 'Chờ phản hồi'}">
+                    <td>
+                        <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                           data-bs-target="#exampleModal1${schedule.getId()}">
+                            Phản hồi
+                        </a>
+                        <div class="modal fade" id="exampleModal1${schedule.getId()}" tabindex="-1"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="/viewing-schedule-admin?action=feedbackSchedule&id=${schedule.getId()}"
+                                          method="post">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel2">Phản hồi lịch xem đến khách hàng</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table>
+                                                <tr>
+                                                    <td>Tên căn hộ:</td>
+                                                    <td>${schedule.getApartmentName()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tên khách hàng</td>
+                                                    <td>${schedule.getCustomerName()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Số điện thoại:</td>
+                                                    <td>
+                                                            ${schedule.getCustomerPhone()}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email:</td>
+                                                    <td>${schedule.getEmail()}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ngày xem:</td>
+                                                    <td>${schedule.getViewDate()}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="submit" class="btn btn-primary" value="Phản hồi">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </c:if>
             </tr>
         </c:forEach>
     </table>
@@ -204,7 +257,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 <script>
-    function showAlert(message){
+    function showAlert(message) {
         alert(message);
     }
 </script>

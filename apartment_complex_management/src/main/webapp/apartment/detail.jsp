@@ -137,7 +137,14 @@
                         </td>
                     </tr>
                 </table>
-                <a class="btn btn-primary" href="/viewing-schedule?action=scheduleView&id=${apartment.getId()}" role="button" style="position: absolute;bottom: 35px;right: 30px;left: 40px">Đặt lịch xem</a>
+                <c:if test="${apartment.getStatus() == 'Chưa cho thuê'}">
+                    <a class="btn btn-primary" href="/viewing-schedule?action=scheduleView&id=${apartment.getId()}"
+                       role="button" style="position: absolute;bottom: 35px;right: 30px;left: 40px">Đặt lịch xem</a>
+                </c:if>
+                <c:if test="${apartment.getStatus() == 'Đã cho thuê'}">
+                    <div class="btn"
+                       role="button" style="position: absolute;bottom: 35px;right: 30px;left: 40px; background-color: #535c68; color: white">Đã cho thuê</div>
+                </c:if>
             </div>
         </div>
     </section>

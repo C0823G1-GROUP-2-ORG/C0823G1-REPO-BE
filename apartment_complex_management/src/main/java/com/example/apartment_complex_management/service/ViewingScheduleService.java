@@ -16,8 +16,8 @@ public class ViewingScheduleService implements IViewingScheduleService {
     private final IViewingScheduleRepository iViewingScheduleRepository = new ViewingScheduleRepository();
     private final IApartmentRepository iApartmentRepository = new ApartmentRepository();
     @Override
-    public void insertViewSchedule(Integer id, String name, String phone, String email) {
-        iViewingScheduleRepository.insertViewSchedule(id,name,phone,email);
+    public void insertViewSchedule(Integer id, String name, String phone, String email, String newDate) {
+        iViewingScheduleRepository.insertViewSchedule(id,name,phone,email,newDate);
     }
 
     @Override
@@ -101,5 +101,10 @@ public class ViewingScheduleService implements IViewingScheduleService {
     @Override
     public void editSchedule(Integer id, String viewDate) {
         iViewingScheduleRepository.editSchedule(id,viewDate);
+    }
+
+    @Override
+    public void feedbackSchedule(Integer id) {
+        iViewingScheduleRepository.feedbackSchedule(id);
     }
 }
